@@ -19,22 +19,9 @@
       display: flex;
       flex-direction: column;
     }
-    /* New wrapper to hold the form and hit counter side-by-side */
-    #formWrapper {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      background-color: #f0f0f0;
-      padding: 5px;
-    }
     form {
-      /* Form-specific styles; width adjusted to allow room for the hit counter */
-      flex: 1;
-    }
-    #hitCounter {
-      margin-left: 20px;
-      display: flex;
-      align-items: center;
+      padding: 5px;
+      background-color: #f0f0f0;
     }
     /* Common control container styling for book and chapter controls */
     #bookControl,
@@ -203,62 +190,58 @@
 </head>
 <body>
   <div id="container">
-    <div id="formWrapper">
-      <form onsubmit="updateIframe(event)">
-        <label>
-          <input type="checkbox" id="oldTestament" onclick="populateBooks(); updateIframe();"> OT
-        </label>
-        <label>
-          <input type="checkbox" id="newTestament" onclick="populateBooks(); updateIframe();"> NT
-        </label>
-        <div id="bookControl">
-          <select id="bookList" name="book" required onchange="populateChapters(); updateIframe();">
-            <option value="" disabled selected>Book</option>
-          </select>
-          <!-- Backward arrow button for book selection -->
-          <button type="button" onclick="changeBook(-1)">
-            <svg viewBox="0 0 24 24">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-          </button>
-          <!-- Forward arrow button for book selection -->
-          <button type="button" onclick="changeBook(1)">
-            <svg viewBox="0 0 24 24">
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-            </svg>
-          </button>
-        </div>
-        <div id="chapterControl">
-          <select id="chapterList" name="chapter" required onchange="updateIframe();">
-            <option value="" disabled selected>Chapter</option>
-          </select>
-          <!-- Backward arrow button for chapter selection -->
-          <button type="button" onclick="changeChapter(-1)">
-            <svg viewBox="0 0 24 24">
-              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-          </button>
-          <!-- Forward arrow button for chapter selection -->
-          <button type="button" onclick="changeChapter(1)">
-            <svg viewBox="0 0 24 24">
-              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
-            </svg>
-          </button>
-        </div>
-        <select id="version" name="version" required onchange="updateIframe();">
-          <option value="NIV">NIV</option>
-          <option value="NLT">NLT</option>
-          <option value="ESV">ESV</option>
-          <option value="NKJV">NKJV</option>
-          <option value="KJV">KJV</option>
-          <option value="SHB">Saral Hindi</option>
+    <form onsubmit="updateIframe(event)">
+      <label>
+        <input type="checkbox" id="oldTestament" onclick="populateBooks(); updateIframe();"> OT
+      </label>
+      <label>
+        <input type="checkbox" id="newTestament" onclick="populateBooks(); updateIframe();"> NT
+      </label>
+      <div id="bookControl">
+        
+        <select id="bookList" name="book" required onchange="populateChapters(); updateIframe();" placeholder="Book">
+          <option value="" disabled selected>Book</option>
         </select>
-      </form>
-      <div id="hitCounter">
-        <!-- Hit counter image. Replace the src with your counter image if needed -->
-        <img alt="Hits" src="https://hits.sh/chrishemb.github.io/bible-lookup.svg"/>
+<!-- Backward arrow button for book selection -->
+        <button type="button" onclick="changeBook(-1)">
+          <svg viewBox="0 0 24 24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+        </button>
+        <!-- Forward arrow button for book selection -->
+        <button type="button" onclick="changeBook(1)">
+          <svg viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+          </svg>
+        </button>
       </div>
-    </div>
+      
+      <div id="chapterControl">
+        <select id="chapterList" name="chapter" required onchange="updateIframe();" placeholder="Chapter">
+          <option value="" disabled selected>Chapter</option>
+        </select>
+        <!-- Backward arrow button for chapter selection -->
+        <button type="button" onclick="changeChapter(-1)">
+          <svg viewBox="0 0 24 24">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+        </button>
+        <!-- Forward arrow button for chapter selection -->
+        <button type="button" onclick="changeChapter(1)">
+          <svg viewBox="0 0 24 24">
+            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+          </svg>
+        </button>
+      </div>
+      <select id="version" name="version" required onchange="updateIframe();">
+        <option value="NIV">NIV</option>
+        <option value="NLT">NLT</option>
+        <option value="ESV">ESV</option>
+        <option value="NKJV">NKJV</option>
+        <option value="KJV">KJV</option>
+<option value="SHB">Saral Hindi</option>
+      </select>
+    </form>
     <iframe id="bibleIframe"></iframe>
   </div>
 </body>
