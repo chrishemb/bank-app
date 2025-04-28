@@ -4,245 +4,63 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bible Lookup</title>
-  <!-- Import Roboto font -->
   <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      font-family: 'Roboto', sans-serif;
-    }
-    #container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    form {
-      padding: 5px;
-      background-color: #f0f0f0;
-    }
-    /* Common control container styling for book and chapter controls */
-    #bookControl,
-    #chapterControl {
-      display: inline-flex;
-      align-items: center;
-      gap: 0px;
-    }
-    /* Common arrow button styling */
-    #bookControl button,
-    #chapterControl button {
-      background: none;
-      border: none;
-      outline: none;
-      padding: 5px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      transition: transform 0.2s ease;
-    }
-    /* Common SVG styling for arrow icons */
-    #bookControl button svg,
-    #chapterControl button svg {
-      width: 24px;
-      height: 24px;
-      fill: #333;
-      transition: fill 0.2s ease;
-    }
-    #bookControl button:hover svg,
-    #chapterControl button:hover svg {
-      fill: #555;
-    }
-    #bookControl button:active,
-    #chapterControl button:active {
-      transform: scale(0.95);
-    }
-    select {
-      padding: 5px;
-      margin: 0;
-    }
-    #bibleIframe {
-      flex: 1;
-      width: 100%;
-      border: none;
-    }
-  </style>
-  <script>
-    function updateIframe(e) {
-      if (e && e.preventDefault) {
-        e.preventDefault();
-      }
-      // Get selected values
-      const book = document.getElementById("bookList").value;
-      const chapter = document.getElementById("chapterList").value;
-      const version = document.getElementById("version").value;
-      // Construct the URL
-      const newPageURL = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(book)}${encodeURIComponent(chapter)}&version=${encodeURIComponent(version)}&interface=print`;
-      // Update the iframe to display the new page
-      document.getElementById("bibleIframe").src = newPageURL;
-    }
-
-    function changeChapter(delta) {
-      const chapterSelect = document.getElementById("chapterList");
-      let currentChapter = parseInt(chapterSelect.value, 10);
-      const currentBook = document.getElementById("bookList").value;
-      const maxChapter = bibleBooks[currentBook] || 1;
-      let newChapter = currentChapter + delta;
-      if (newChapter < 1) {
-        newChapter = 1;
-      } else if (newChapter > maxChapter) {
-        newChapter = maxChapter;
-      }
-      chapterSelect.value = newChapter;
-      updateIframe();
-    }
-
-    function changeBook(delta) {
-      const bookSelect = document.getElementById("bookList");
-      let newIndex = bookSelect.selectedIndex + delta;
-      if (newIndex < 0) {
-        newIndex = 0;
-      } else if (newIndex >= bookSelect.options.length) {
-        newIndex = bookSelect.options.length - 1;
-      }
-      bookSelect.selectedIndex = newIndex;
-      populateChapters();
-      updateIframe();
-    }
-
-    const oldTestamentBooks = [
-      "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-      "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-      "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra",
-      "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
-      "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah", "Lamentations",
-      "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
-      "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
-      "Zephaniah", "Haggai", "Zechariah", "Malachi"
-    ];
-
-    const newTestamentBooks = [
-      "Matthew", "Mark", "Luke", "John", "Acts",
-      "Romans", "1 Corinthians", "2 Corinthians", "Galatians", "Ephesians",
-      "Philippians", "Colossians", "1 Thessalonians", "2 Thessalonians",
-      "1 Timothy", "2 Timothy", "Titus", "Philemon", "Hebrews",
-      "James", "1 Peter", "2 Peter", "1 John", "2 John",
-      "3 John", "Jude", "Revelation"
-    ];
-
-    function populateBooks() {
-      const bookList = document.getElementById("bookList");
-      bookList.innerHTML = "";
-      const includeOldTestament = document.getElementById("oldTestament").checked;
-      const includeNewTestament = document.getElementById("newTestament").checked;
-      let booksToDisplay = [];
-      if (includeOldTestament) booksToDisplay = booksToDisplay.concat(oldTestamentBooks);
-      if (includeNewTestament) booksToDisplay = booksToDisplay.concat(newTestamentBooks);
-      booksToDisplay.forEach(book => {
-        const option = document.createElement("option");
-        option.value = book;
-        option.textContent = book;
-        bookList.appendChild(option);
-      });
-      populateChapters();
-    }
-
-    const bibleBooks = {
-      "Genesis": 50, "Exodus": 40, "Leviticus": 27, "Numbers": 36, "Deuteronomy": 34,
-      "Joshua": 24, "Judges": 21, "Ruth": 4, "1 Samuel": 31, "2 Samuel": 24,
-      "1 Kings": 22, "2 Kings": 25, "1 Chronicles": 29, "2 Chronicles": 36, "Ezra": 10,
-      "Nehemiah": 13, "Esther": 10, "Job": 42, "Psalms": 150, "Proverbs": 31,
-      "Ecclesiastes": 12, "Song of Solomon": 8, "Isaiah": 66, "Jeremiah": 52, "Lamentations": 5,
-      "Ezekiel": 48, "Daniel": 12, "Hosea": 14, "Joel": 3, "Amos": 9,
-      "Obadiah": 1, "Jonah": 4, "Micah": 7, "Nahum": 3, "Habakkuk": 3,
-      "Zephaniah": 3, "Haggai": 2, "Zechariah": 14, "Malachi": 4,
-      "Matthew": 28, "Mark": 16, "Luke": 24, "John": 21, "Acts": 28,
-      "Romans": 16, "1 Corinthians": 16, "2 Corinthians": 13, "Galatians": 6, "Ephesians": 6,
-      "Philippians": 4, "Colossians": 4, "1 Thessalonians": 5, "2 Thessalonians": 3,
-      "1 Timothy": 6, "2 Timothy": 4, "Titus": 3, "Philemon": 1, "Hebrews": 13,
-      "James": 5, "1 Peter": 5, "2 Peter": 3, "1 John": 5, "2 John": 1,
-      "3 John": 1, "Jude": 1, "Revelation": 22
-    };
-
-    function populateChapters() {
-      const book = document.getElementById("bookList").value;
-      const chapterList = document.getElementById("chapterList");
-      chapterList.innerHTML = "";
-      const chapterCount = bibleBooks[book];
-      if (chapterCount) {
-        for (let i = 1; i <= chapterCount; i++) {
-          const option = document.createElement("option");
-          option.value = i;
-          option.textContent = i;
-          chapterList.appendChild(option);
-        }
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const newTestamentCheckbox = document.getElementById("newTestament");
-      newTestamentCheckbox.checked = true;
-      populateBooks();
-      updateIframe();
-    });
-  </script>
+  <link rel="stylesheet" href="styles.css"> <!-- External CSS -->
+  <script defer src="script.js"></script> <!-- External JS -->
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon -->
 </head>
 <body>
-  <div id="container">
-    <form onsubmit="updateIframe(event)">
-      <label>
-        <input type="checkbox" id="oldTestament" onclick="populateBooks(); updateIframe();"> OT
+  <main id="container">
+    <form onsubmit="updateIframe(event)" aria-label="Bible Lookup Form">
+      <label for="oldTestament">
+        <input type="checkbox" id="oldTestament" onclick="populateBooks(); updateIframe();" aria-label="Include Old Testament"> OT
       </label>
-      <label>
-        <input type="checkbox" id="newTestament" onclick="populateBooks(); updateIframe();"> NT
+      <label for="newTestament">
+        <input type="checkbox" id="newTestament" onclick="populateBooks(); updateIframe();" aria-label="Include New Testament"> NT
       </label>
       <div id="bookControl">
-        
-        <select id="bookList" name="book" required onchange="populateChapters(); updateIframe();" placeholder="Book">
+        <label for="bookList" class="sr-only">Select Book</label>
+        <select id="bookList" name="book" required onchange="populateChapters(); updateIframe();" placeholder="Book" aria-label="Select Book">
           <option value="" disabled selected>Book</option>
         </select>
-<!-- Backward arrow button for book selection -->
-        <button type="button" onclick="changeBook(-1)">
+        <button type="button" onclick="changeBook(-1)" aria-label="Previous Book">
           <svg viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
           </svg>
         </button>
-        <!-- Forward arrow button for book selection -->
-        <button type="button" onclick="changeBook(1)">
+        <button type="button" onclick="changeBook(1)" aria-label="Next Book">
           <svg viewBox="0 0 24 24">
             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
           </svg>
         </button>
       </div>
-      
       <div id="chapterControl">
-        <select id="chapterList" name="chapter" required onchange="updateIframe();" placeholder="Chapter">
+        <label for="chapterList" class="sr-only">Select Chapter</label>
+        <select id="chapterList" name="chapter" required onchange="updateIframe();" placeholder="Chapter" aria-label="Select Chapter">
           <option value="" disabled selected>Chapter</option>
         </select>
-        <!-- Backward arrow button for chapter selection -->
-        <button type="button" onclick="changeChapter(-1)">
+        <button type="button" onclick="changeChapter(-1)" aria-label="Previous Chapter">
           <svg viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
           </svg>
         </button>
-        <!-- Forward arrow button for chapter selection -->
-        <button type="button" onclick="changeChapter(1)">
+        <button type="button" onclick="changeChapter(1)" aria-label="Next Chapter">
           <svg viewBox="0 0 24 24">
             <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
           </svg>
         </button>
       </div>
-      <select id="version" name="version" required onchange="updateIframe();">
+      <label for="version" class="sr-only">Select Version</label>
+      <select id="version" name="version" required onchange="updateIframe();" aria-label="Select Bible Version">
         <option value="NIV">NIV</option>
         <option value="NLT">NLT</option>
         <option value="ESV">ESV</option>
         <option value="NKJV">NKJV</option>
         <option value="KJV">KJV</option>
-<option value="SHB">Saral Hindi</option>
+        <option value="SHB">Saral Hindi</option>
       </select>
     </form>
-    <iframe id="bibleIframe"></iframe>
-  </div>
+    <iframe id="bibleIframe" aria-label="Bible Content" loading="lazy"></iframe>
+  </main>
 </body>
 </html>
