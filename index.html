@@ -24,6 +24,7 @@
       padding: 5px;
       background-color: #f0f0f0;
       display: flex;
+      flex-direction: row; /* Initially arrange elements in a row */
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
@@ -40,7 +41,7 @@
       background: none;
       border: none;
       outline: none;
-      padding: 5px;
+      padding: 3px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -70,11 +71,7 @@
       width: 100%;
       border: none;
     }
-    #form-container {
-  display: flex;
-  flex-direction: row; /* Initially arrange elements in a row */
-  flex-wrap: wrap; /* Allow elements to wrap to the next line */
-}
+    
   </style>
   <script>
     function updateIframe(e) {
@@ -198,7 +195,7 @@
 </head>
 <body>
   <div id="container">
-    <div class="form-container">
+    
     <form onsubmit="updateIframe(event)">
       <label>
         <input type="checkbox" id="oldTestament" onclick="populateBooks(); updateIframe();"> OT
@@ -206,6 +203,14 @@
       <label>
         <input type="checkbox" id="newTestament" onclick="populateBooks(); updateIframe();"> NT
       </label>
+      <select id="version" name="version" required onchange="updateIframe();">
+        <option value="NIV">NIV</option>
+        <option value="NLT">NLT</option>
+        <option value="ESV">ESV</option>
+        <option value="NKJV">NKJV</option>
+        <option value="KJV">KJV</option>
+        <option value="SHB">Saral Hindi</option>
+      </select>
       <div id="bookControl">
         <select id="bookList" name="book" required onchange="populateChapters(); updateIframe();" placeholder="Book">
           <option value="" disabled selected>Book</option>
@@ -240,16 +245,8 @@
           </svg>
         </button>
       </div>
-      <select id="version" name="version" required onchange="updateIframe();">
-        <option value="NIV">NIV</option>
-        <option value="NLT">NLT</option>
-        <option value="ESV">ESV</option>
-        <option value="NKJV">NKJV</option>
-        <option value="KJV">KJV</option>
-        <option value="SHB">Saral Hindi</option>
-      </select>
     </form>
-    </div>
+    
     <iframe id="bibleIframe"></iframe>
   </div>
 </body>
